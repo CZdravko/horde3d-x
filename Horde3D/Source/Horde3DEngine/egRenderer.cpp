@@ -90,6 +90,7 @@ unsigned char *Renderer::useScratchBuf( uint32 minSize )
 bool Renderer::init()
 {
 	// Init Render Device Interface
+	Modules::log().writeInfo("Init Render Device Interface");
 	if( !gRDI->init() ) return false;
 
 	// Check capabilities

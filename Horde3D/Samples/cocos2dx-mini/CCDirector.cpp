@@ -65,7 +65,7 @@ static CCDisplayLinkDirector *s_SharedDirector = NULL;
 static AAssetManager* g_pManager = NULL;
 
 
-#define kDefaultFPS        60  // 60 frames per second
+#define kDefaultFPS        2  // 60 frames per second
 extern const char* cocos2dVersion(void);
 
 CCDirector* CCDirector::sharedDirector(void)

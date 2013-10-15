@@ -22,6 +22,20 @@
 #include "cocos2d.h"
 
 
+#include <android/log.h>
+
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO,  \
+											 "NvSLESPlayer", \
+											 __VA_ARGS__))
+
+#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG,  \
+											 "NvSLESPlayer", \
+											 __VA_ARGS__))
+
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR,  \
+											 "NvSLESPlayer", \
+											 __VA_ARGS__))
+
 using namespace std;
 using namespace cocos2d;
 
@@ -56,6 +70,7 @@ Scene::Scene( )
 	// Initialize engine
 	if( !h3dInit( CCDirector::sharedDirector()->getOpenGLView()->getDevice() ) )
 	{	
+		LOGE("COULDN't INITIALIZE HORDE");
 		h3dutDumpMessages();
 		exit(-1);
 	}
@@ -86,7 +101,7 @@ Scene::Scene( )
 	const char* platformDirectory = "d3d11";
 #elif HORDE3D_GL
 	const char* platformDirectory = "gl";
-#elif HORDE3D_GLES2
+#elif defined(HORDE3D_GLES2)
 	const char* platformDirectory = "gles2";
 #endif
 	CCDirector::sharedDirector()->loadResourcesFromDisk( _contentDir.c_str(), platformDirectory );

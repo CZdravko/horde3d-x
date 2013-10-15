@@ -18,7 +18,7 @@ LOCAL_SRC_FILES := \
 ../platform/android/CCApplication.cpp \
 ../platform/android/CCCommon.cpp \
 ../platform/android/CCFileUtilsAndroid.cpp \
-../platform/android/Java_org_cocos2dx_chicago_Chicago.cpp \
+../platform/android/jni/Java_org_cocos2dx_chicago_Chicago.cpp \
 ../platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxBitmap.cpp \
 ../platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.cpp \
 ../platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxRenderer.cpp \
@@ -46,10 +46,12 @@ LOCAL_C_INCLUDES := $(LOCAL_PATH)/../ \
 
 LOCAL_LDLIBS := -lGLESv2 \
                 -llog \
+                -landroid \
                 -lz
 
 LOCAL_EXPORT_LDLIBS := -lGLESv2 \
                        -llog \
+                       -landroid \
                        -lz
 
 # define the macro to compile through support/zip_support/ioapi.c

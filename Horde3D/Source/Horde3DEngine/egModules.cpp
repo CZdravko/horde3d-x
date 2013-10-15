@@ -73,6 +73,7 @@ bool Modules::init( void *device )
 	if( _engineConfig == 0x0 ) _engineConfig = new EngineConfig();
 	if( _sceneManager == 0x0 ) _sceneManager = new SceneManager();
 	if( _resourceManager == 0x0 ) _resourceManager = new ResourceManager();
+	_engineLog->writeInfo("INITING RENDER DEVICE");
 	if( _renderDevice == 0x0 ) _renderDevice = new RenderDevice( device );
 	gRDI = _renderDevice;
 	if( _renderer == 0x0 ) _renderer = new Renderer();

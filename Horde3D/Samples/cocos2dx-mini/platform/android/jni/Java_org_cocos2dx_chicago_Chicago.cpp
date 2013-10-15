@@ -29,13 +29,12 @@
 using namespace cocos2d;
 
 extern "C" {
-JNIEXPORT void JNICALL Java_com_android_particles_ParticlesLib_createAssetManager(
+JNIEXPORT void JNICALL Java_org_cocos2dx_chicago_Chicago_createAssetManager(
 		JNIEnv* env, jobject obj, jobject assetManager) {
 
 	LOGI("SETTING A GLOBAL ASSET MANAGER POINTER");
 
 	AAssetManager* mgr = AAssetManager_fromJava(env, assetManager);
-	assert(mgr);
 
 	// Store the assest manager for future use.
 	CCDirector::setAssetManager(mgr);

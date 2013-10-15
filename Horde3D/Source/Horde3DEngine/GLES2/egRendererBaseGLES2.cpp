@@ -181,11 +181,11 @@ bool RenderDevice::init()
 	char *renderer = (char *)glGetString( GL_RENDERER );
 	char *version = (char *)glGetString( GL_VERSION );
 	char *extensions = (char *)glGetString( GL_EXTENSIONS );
-	
+
 	Modules::log().writeInfo( "Initializing GLES2 backend using OpenGL ES driver '%s' by '%s' on '%s'",
 	                          version, vendor, renderer );
 	Modules::log().writeInfo( "extensions: %s", extensions);
-	
+
 	// Init extensions
 	if( !initOpenGLExtensions() )
 	{	
@@ -637,6 +637,7 @@ uint32 RenderDevice::createShaderProgram( const char *vertexShaderSrc, const cha
 			infoLog = new char[infologLength];
 			glGetShaderInfoLog( vs, infologLength, &charsWritten, infoLog );
 			_shaderLog = _shaderLog + "[Vertex Shader]\n" + infoLog;
+			Modules::log().writeError(_shaderLog.c_str());
 			delete[] infoLog; infoLog = 0x0;
 		}
 
@@ -657,6 +658,7 @@ uint32 RenderDevice::createShaderProgram( const char *vertexShaderSrc, const cha
 			infoLog = new char[infologLength];
 			glGetShaderInfoLog( fs, infologLength, &charsWritten, infoLog );
 			_shaderLog = _shaderLog + "[Fragment Shader]\n" + infoLog;
+			Modules::log().writeError(_shaderLog.c_str());
 			delete[] infoLog; infoLog = 0x0;
 		}
 
@@ -665,12 +667,13 @@ uint32 RenderDevice::createShaderProgram( const char *vertexShaderSrc, const cha
 		return 0;
 	}
 
+	Modules::log().writeInfo("Done compiling shaders!");
 	// Shader program
 	uint32 program = glCreateProgram();
 	glAttachShader( program, vs );
 	glAttachShader( program, fs );
-	glDeleteShader( vs );
-	glDeleteShader( fs );
+//	glDeleteShader( vs );
+//	glDeleteShader( fs );
 
 	return program;
 }

@@ -14,12 +14,14 @@
 //
 // *************************************************************************************************
 
+#include "cocos2d.h"
 #include "crowd.h"
 #include <math.h>
 #include <stdlib.h>
 #include <time.h>
 #include "Horde3DUtils.h"
 
+using namespace cocos2d;
 
 void CrowdSim::chooseDestination( Particle &p )
 {
@@ -41,10 +43,25 @@ void CrowdSim::init()
 	// Load character with walk animation
 	H3DRes characterRes = h3dAddResource( H3DResTypes::SceneGraph, "models/man/man.scene.xml", 0 );
 	H3DRes characterWalkRes = h3dAddResource( H3DResTypes::Animation, "animations/man.anim", 0 );
-	h3dutLoadResourcesFromDisk( _contentDir.c_str() );
+
+	/*
+	 * REPLACING ENGINE's LOADER
+	 */
+	//	h3dutLoadResourcesFromDisk( _contentDir.c_str() );
+
 	
+#ifdef HORDE3D_D3D11
+	const char* platformDirectory = "d3d11";
+#elif HORDE3D_GL
+	const char* platformDirectory = "gl";
+#elif defined(HORDE3D_GLES2)
+	const char* platformDirectory = "gles2";
+#endif
+	CCDirector::sharedDirector()->loadResourcesFromDisk( _contentDir.c_str(), platformDirectory );
+
+
 	// Add characters
-	for( unsigned int i = 0; i < 100; ++i )
+	for( unsigned int i = 0; i < 5; ++i )
 	{
 		Particle p;
 		

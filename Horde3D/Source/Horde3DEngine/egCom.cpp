@@ -22,17 +22,6 @@
 #ifdef PLATFORM_ANDROID
 #include <android/log.h>
 
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO,  \
-											 "NvSLESPlayer", \
-											 __VA_ARGS__))
-
-#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG,  \
-											 "NvSLESPlayer", \
-											 __VA_ARGS__))
-
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR,  \
-											 "NvSLESPlayer", \
-											 __VA_ARGS__))
 
 #endif
 
@@ -197,14 +186,7 @@ void EngineLog::pushMessage( int level, const char *msg, va_list args )
 #pragma warning( disable:4996 )
 	vsnprintf( _textBuf, 2048, msg, args );
 #pragma warning( pop )
-#elif defined( PLATFORM_ANDROID )
-	if(level == 1){
-		LOGE(msg);
-	}else if (level==2) {
-		LOGD(msg);
-	}else {
-		LOGI(msg);
-	}
+
 #else
 	vsnprintf( _textBuf, 2048, msg, args );
 #endif
@@ -230,11 +212,17 @@ void EngineLog::pushMessage( int level, const char *msg, va_list args )
 
 void EngineLog::writeError( const char *msg, ... )
 {
+
 	if( Modules::config().maxLogLevel < 1 ) return;
 
 	va_list args;
 	va_start( args, msg );
+#if defined( PLATFORM_ANDROID )
+	__android_log_vprint(ANDROID_LOG_ERROR, "PACKT", msg,
+				args);
+#else
 	pushMessage( 1, msg, args );
+#endif
 	va_end( args );
 }
 
@@ -245,7 +233,12 @@ void EngineLog::writeWarning( const char *msg, ... )
 
 	va_list args;
 	va_start( args, msg );
+#if defined( PLATFORM_ANDROID )
+	__android_log_vprint(ANDROID_LOG_WARN, "PACKT", msg,
+				args);
+#else
 	pushMessage( 2, msg, args );
+#endif
 	va_end( args );
 }
 
@@ -256,7 +249,12 @@ void EngineLog::writeInfo( const char *msg, ... )
 
 	va_list args;
 	va_start( args, msg );
+#if defined( PLATFORM_ANDROID )
+	__android_log_vprint(ANDROID_LOG_INFO, "PACKT", msg,
+				args);
+#else
 	pushMessage( 3, msg, args );
+#endif
 	va_end( args );
 }
 
@@ -267,7 +265,12 @@ void EngineLog::writeDebugInfo( const char *msg, ... )
 
 	va_list args;
 	va_start( args, msg );
+#if defined( PLATFORM_ANDROID )
+	__android_log_vprint(ANDROID_LOG_DEBUG, "PACKT", msg,
+				args);
+#else
 	pushMessage( 4, msg, args );
+#endif
 	va_end( args );
 }
 
