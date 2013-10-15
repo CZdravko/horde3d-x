@@ -40,6 +40,9 @@ THE SOFTWARE.
 #include "Horde3D.h"
 #include <fstream>
 
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
+
 
 /**
  Position of the FPS
@@ -59,6 +62,8 @@ NS_CC_BEGIN
 
 // singleton stuff
 static CCDisplayLinkDirector *s_SharedDirector = NULL;
+static AAssetManager* g_pManager = NULL;
+
 
 #define kDefaultFPS        60  // 60 frames per second
 extern const char* cocos2dVersion(void);
@@ -72,6 +77,10 @@ CCDirector* CCDirector::sharedDirector(void)
     }
 
     return s_SharedDirector;
+}
+
+void CCDirector::setAssetManager(AssetManager* am){
+	g_pManager = am;
 }
 
 CCDirector::CCDirector(void)

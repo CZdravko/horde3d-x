@@ -1,3 +1,4 @@
+
 /****************************************************************************
 Copyright (c) 2010-2013 cocos2d-x.org
 
@@ -27,6 +28,7 @@ import org.cocos2dx.lib.Cocos2dxHelper.Cocos2dxHelperListener;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
@@ -34,10 +36,13 @@ import android.view.ViewGroup;
 import android.util.Log;
 import android.widget.FrameLayout;
 
+
+
 public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelperListener {
 	// ===========================================================
 	// Constants
 	// ===========================================================
+	
 
 	private static final String TAG = Cocos2dxActivity.class.getSimpleName();
 

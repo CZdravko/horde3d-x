@@ -34,6 +34,9 @@ THE SOFTWARE.
 #include "include/ccTypeInfo.h"
 #include <queue>  
 
+#include <android/asset_manager.h>
+#include <android/asset_manager_jni.h>
+
 NS_CC_BEGIN
 
 /** @typedef ccDirectorProjection
@@ -216,6 +219,9 @@ public:
 public:
     /** returns a shared instance of the director */
     static CCDirector* sharedDirector(void);
+
+    //setting a global AssetManager
+    static void setAssetManager(AssetManager* am);
 
 protected:
 

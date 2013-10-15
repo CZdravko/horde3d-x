@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?>
+
+<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="0.1116927680">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="0.1116927680" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.VCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GmakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.CWDLocator" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GLDErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" id="0.1116927680" name="Default" parent="org.eclipse.cdt.build.core.prefbase.cfg">
+					<folderInfo id="0.1116927680." name="/" resourcePath="">
+						<toolChain id="org.eclipse.cdt.build.core.prefbase.toolchain.2013802714" name="No ToolChain" resourceTypeBasedDiscovery="false" superClass="org.eclipse.cdt.build.core.prefbase.toolchain">
+							<targetPlatform id="org.eclipse.cdt.build.core.prefbase.toolchain.2013802714.296265320" name=""/>
+							<builder id="org.eclipse.cdt.build.core.settings.default.builder.1647983479" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="Gnu Make Builder" superClass="org.eclipse.cdt.build.core.settings.default.builder"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.libs.1317063702" name="holder for library settings" superClass="org.eclipse.cdt.build.core.settings.holder.libs"/>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.992425849" name="Assembly" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.1543803492" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\sources\cxx-stl\stlport\stlport&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\toolchains\arm-linux-androideabi-4.7\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.7\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\toolchains\arm-linux-androideabi-4.7\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.7\include-fixed&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\platforms\android-14\arch-arm\usr\include&quot;"/>
+								</option>
+								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.1496874487" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="__ANDROID__"/>
+									<listOptionValue builtIn="false" value="ANDROID"/>
+									<listOptionValue builtIn="false" value="HORDE3D_GLES2"/>
+								</option>
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.439097238" languageId="org.eclipse.cdt.core.assembly" languageName="Assembly" sourceContentType="org.eclipse.cdt.core.asmSource" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.1726687093" name="GNU C++" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.65862521" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\sources\cxx-stl\stlport\stlport&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\toolchains\arm-linux-androideabi-4.7\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.7\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\toolchains\arm-linux-androideabi-4.7\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.7\include-fixed&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\platforms\android-14\arch-arm\usr\include&quot;"/>
+								</option>
+								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.515014332" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="__ANDROID__"/>
+									<listOptionValue builtIn="false" value="ANDROID"/>
+									<listOptionValue builtIn="false" value="HORDE3D_GLES2"/>
+								</option>
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.1656934286" languageId="org.eclipse.cdt.core.g++" languageName="GNU C++" sourceContentType="org.eclipse.cdt.core.cxxSource,org.eclipse.cdt.core.cxxHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+							<tool id="org.eclipse.cdt.build.core.settings.holder.1381332714" name="GNU C" superClass="org.eclipse.cdt.build.core.settings.holder">
+								<option id="org.eclipse.cdt.build.core.settings.holder.incpaths.758191950" name="Include Paths" superClass="org.eclipse.cdt.build.core.settings.holder.incpaths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\sources\cxx-stl\stlport\stlport&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\toolchains\arm-linux-androideabi-4.7\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.7\include&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\toolchains\arm-linux-androideabi-4.7\prebuilt\windows\lib\gcc\arm-linux-androideabi\4.7\include-fixed&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${NDKROOT}\platforms\android-14\arch-arm\usr\include&quot;"/>
+								</option>
+								<option id="org.eclipse.cdt.build.core.settings.holder.symbols.143359356" name="Symbols" superClass="org.eclipse.cdt.build.core.settings.holder.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="__ANDROID__"/>
+									<listOptionValue builtIn="false" value="ANDROID"/>
+									<listOptionValue builtIn="false" value="HORDE3D_GLES2"/>
+								</option>
+								<inputType id="org.eclipse.cdt.build.core.settings.holder.inType.729988045" languageId="org.eclipse.cdt.core.gcc" languageName="GNU C" sourceContentType="org.eclipse.cdt.core.cSource,org.eclipse.cdt.core.cHeader" superClass="org.eclipse.cdt.build.core.settings.holder.inType"/>
+							</tool>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="Horde3D-Source@horde3d-cz.null.495011357" name="Horde3D-Source@horde3d-cz"/>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="0.1116927680">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="refreshScope"/>
+</cproject>
