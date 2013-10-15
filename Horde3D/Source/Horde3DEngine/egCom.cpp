@@ -19,6 +19,23 @@
 
 #include "utDebug.h"
 
+#ifdef PLATFORM_ANDROID
+#include <android/log.h>
+
+#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO,  \
+											 "NvSLESPlayer", \
+											 __VA_ARGS__))
+
+#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG,  \
+											 "NvSLESPlayer", \
+											 __VA_ARGS__))
+
+#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR,  \
+											 "NvSLESPlayer", \
+											 __VA_ARGS__))
+
+#endif
+
 
 namespace Horde3D {
 
@@ -180,6 +197,14 @@ void EngineLog::pushMessage( int level, const char *msg, va_list args )
 #pragma warning( disable:4996 )
 	vsnprintf( _textBuf, 2048, msg, args );
 #pragma warning( pop )
+#elif defined( PLATFORM_ANDROID )
+	if(level == 1){
+		LOGE(msg);
+	}else if (level==2) {
+		LOGD(msg);
+	}else {
+		LOGI(msg);
+	}
 #else
 	vsnprintf( _textBuf, 2048, msg, args );
 #endif

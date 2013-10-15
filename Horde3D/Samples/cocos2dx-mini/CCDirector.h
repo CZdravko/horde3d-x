@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include "include/ccTypeInfo.h"
 #include <queue>  
 
+#include <sys/types.h>
 #include <android/asset_manager.h>
 #include <android/asset_manager_jni.h>
 
@@ -221,7 +222,7 @@ public:
     static CCDirector* sharedDirector(void);
 
     //setting a global AssetManager
-    static void setAssetManager(AssetManager* am);
+    static void setAssetManager(AAssetManager* am);
 
 protected:
 

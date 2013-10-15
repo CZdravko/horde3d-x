@@ -79,7 +79,7 @@ CCDirector* CCDirector::sharedDirector(void)
     return s_SharedDirector;
 }
 
-void CCDirector::setAssetManager(AssetManager* am){
+void CCDirector::setAssetManager(AAssetManager* am){
 	g_pManager = am;
 }
 

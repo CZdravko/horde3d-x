@@ -26,12 +26,16 @@ package org.cocos2dx.chicago;
 import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
+import android.content.res.AssetManager;
 import android.os.Bundle;
 
 public class Chicago extends Cocos2dxActivity{
+	static AssetManager sAssetManager;
 	
     protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);	
+		sAssetManager = getAssets();
+		createAssetManager(sAssetManager);
 	}
 
     public Cocos2dxGLSurfaceView onCreateView() {
@@ -45,4 +49,6 @@ public class Chicago extends Cocos2dxActivity{
     static {
         System.loadLibrary("chicago");
     }     
+    
+    public static native void createAssetManager( AssetManager assetManager );
 }
