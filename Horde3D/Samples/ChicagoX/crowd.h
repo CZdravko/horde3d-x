@@ -55,6 +55,7 @@ private:
 private:
 	std::string              _contentDir;
 	std::vector< Particle >  _particles;
+	std::vector< Particle >  _lights;
 };
 
 #endif // _crowd_H_

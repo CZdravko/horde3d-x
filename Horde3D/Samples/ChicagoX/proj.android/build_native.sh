@@ -30,6 +30,8 @@ exit 0
 esac
 done
 
+NDK_ROOT="$NDKROOT"
+
 # paths
 
 if [ -z "${NDK_ROOT+aaa}" ];then

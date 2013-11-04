@@ -19,9 +19,13 @@
 
 #include "crowd.h"
 #include <string>
+#include <vector>
 #include "CCEvent.h"
 #include "nodes/CCNode.h"
+#include "PointLight.h"
+#include "utMath.h"
 
+using namespace Horde3D;
 
 
 class Scene: public cocos2d::CCNode
@@ -41,6 +45,21 @@ public:
 
 	void keyStateHandler();
 	void mouseMoveEvent( float dX, float dY );
+
+	void updateLightTexture();
+	void tileIt(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer);
+	void getQZRange(float ZMin, float ZMax, int* lower, int* upper);
+	void getQYRange(float YMin, float YMax, int* lower, int* upper);
+	void project2Near(float& l, float Z);
+	void project2Near(Vec3f& point);
+	void flattenSphere(Vec3f& Bottom, Vec3f& Top, float& rbottom, float& rtop);
+	void cutSphere(float Z, Vec3f R, float r, Vec3f& RCut, float& rc);
+	void markYRowTilesSphere(float from, float to, int count, uint8_t Z, uint8_t Y, uint8_t lightIndex, uint8_t* texPointer);
+	void markZRowTilesSphere(Vec3f* R, float r, uint8_t Z, uint8_t lightIndex, uint8_t* texPointer);
+
+	uint8_t* pack_float(float val, uint8_t* chbuffer);
+
+	static float quantizedZ[17];
 
 private:
 	void keyHandler();
@@ -64,6 +83,37 @@ private:
 	H3DRes       _fontMatRes, _panelMatRes;
 	H3DRes       _logoMatRes, _forwardPipeRes, _deferredPipeRes;
 	H3DNode      _cam;
+	H3DRes 		texRes;
+	H3DRes 		lightColorTex; //RGB8 Texture with light color
+	H3DRes 		lightRrTex; //RGBA16F Texture with x,z,y,r values
+	H3DRes 		tileTex; //RGBA16F Texture with x,z,y,r values
+
+	unsigned int color_index, tTexW, tTexH;
+
+	int m_iWinWidth, m_iWinHeight;
+	float m_fZNear;
+
+	float m_fFOVy;
+
+	float fRightEdge;
+	float fTopEdge;
+
+	float xStep;
+	float yStep;
+	unsigned short numZDivisions;
+	unsigned short numYDivisions;
+
+	float quantizedY[18]; // = {2.0f,4.0f,8.0f,16.0f,32.0f,64.0f,128.0f,256.0f,512.0f,1024.0f};
+	float quantizedX[18]; // = {2.0f,4.0f,8.0f,16.0f,32.0f,64.0f,128.0f,256.0f,512.0f,1024.0f};
+
+	//lists of lights aff. each tile
+	//limited to 64 lights per tile
+	int lists[16 * 16 * 16][64];
+
+	//int counts[16 * 16 * 16] = { }; //counters
+
+	std::vector<PointLight> m_vPointLights;
+
 
 	std::string  _contentDir;
 };

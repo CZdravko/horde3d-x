@@ -8,10 +8,15 @@ LOCAL_MODULE_FILENAME := libchicago
 
 LOCAL_SRC_FILES := chicago/main.cpp \
                    ../../AppDelegate.cpp \
+                   ../../ConvexHull.cpp	\
+                   ../../Plane.cpp	\
+                   ../../PointLight.cpp	\
+                   ../../Spotlight.cpp	\
                    ../../Scene.cpp	\
                    ../../crowd.cpp
 
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../	\
+					$(LOCAL_PATH)/../../../../Source/Shared
 
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += horde3d_static

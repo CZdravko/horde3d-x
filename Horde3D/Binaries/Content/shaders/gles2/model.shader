@@ -21,6 +21,21 @@ sampler2D normalMap = sampler_state
 	Texture = "textures/common/defnorm.tga";
 };
 
+sampler2D lightColorMap = sampler_state
+{
+	Texture = "textures/common/white.tga";
+};
+
+sampler2D lightRrMap = sampler_state
+{
+	Texture = "textures/common/white.tga";
+};
+
+sampler2D tileMap = sampler_state
+{
+	Texture = "textures/common/white.tga";
+};
+
 samplerCube ambientMap = sampler_state
 {
 	Address = Clamp;
@@ -68,10 +83,42 @@ context LIGHTING
 	BlendMode = Add;
 }
 
+context LIGHTING2
+{
+	VertexShader = compile GLSL VS_VOLUME;
+	PixelShader = compile GLSL FS_VOLUME;
+	
+	ZWriteEnable = false;
+	BlendMode = Add;
+}
+
 context AMBIENT
 {
 	VertexShader = compile GLSL VS_GENERAL;
 	PixelShader = compile GLSL FS_AMBIENT;
+}
+
+[[VS_VOLUME]]
+
+uniform mat4 viewProjMat;
+uniform mat4 worldMat;
+attribute vec3 vertPos;
+varying vec4 vpos;
+				
+void main( void )
+{
+	vpos = viewProjMat * worldMat * vec4( vertPos, 1 );
+	gl_Position = vpos;
+}
+
+
+[[FS_VOLUME]]
+
+varying vec4 vpos;
+				
+void main( void )
+{
+	gl_FragColor.rgb = vpos.rgb; //vec3(255.0, 153.0, 51.0);
 }
 
 
