@@ -48,6 +48,7 @@ public:
 
 	void updateLightTexture();
 	void tileIt(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer);
+	void tileIt2(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer);
 	void getQZRange(float ZMin, float ZMax, int* lower, int* upper);
 	void getQYRange(float YMin, float YMax, int* lower, int* upper);
 	void project2Near(float& l, float Z);
