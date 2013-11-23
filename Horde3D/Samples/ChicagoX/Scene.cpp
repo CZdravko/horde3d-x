@@ -22,20 +22,7 @@
 #include "cocos2d.h"
 #include "PointLight.h"
 #include <vector>
-
-#include <android/log.h>
-
-#define LOGI(...) ((void)__android_log_print(ANDROID_LOG_INFO,  \
-											 "NvSLESPlayer", \
-											 __VA_ARGS__))
-
-#define LOGD(...) ((void)__android_log_print(ANDROID_LOG_DEBUG,  \
-											 "NvSLESPlayer", \
-											 __VA_ARGS__))
-
-#define LOGE(...) ((void)__android_log_print(ANDROID_LOG_ERROR,  \
-											 "NvSLESPlayer", \
-											 __VA_ARGS__))
+#include "utMath.h"
 
 using namespace std;
 using namespace cocos2d;
@@ -87,7 +74,7 @@ Scene::Scene() {
 
 	// Initialize engine
 	if (!h3dInit(CCDirector::sharedDirector()->getOpenGLView()->getDevice())) {
-		LOGE("COULDN't INITIALIZE HORDE");
+		
 		h3dutDumpMessages();
 		exit(-1);
 	}
@@ -122,11 +109,11 @@ Scene::Scene() {
 			"models/skybox/skybox.scene.xml", 0);
 
 	//Adding 2 lights:
-	PointLight p1 = PointLight(Vec3f(1, 1, 1), 6, 1);
-	PointLight p2 = PointLight(Vec3f(-1, 2, -3), 2, 2);
+	PointLight p1 = PointLight(Vec3f(0, 0, -10), 2, 1);
+	//PointLight p2 = PointLight(Vec3f(-1, 2, -3), 2, 2);
 
 	m_vPointLights.push_back(p1);
-	m_vPointLights.push_back(p2);
+	//m_vPointLights.push_back(p2);
 
 	//light Color texture
 	lightColorTex = h3dCreateTexture("lightColorTex", 256, 4,
@@ -160,10 +147,10 @@ Scene::Scene() {
 	pLightRr = pack_float(p1.position.z, pLightRr);
 	pLightRr = pack_float(p1.r, pLightRr);
 	//L2
-	pLightRr = pack_float(p2.position.x, pLightRr);
+	/*pLightRr = pack_float(p2.position.x, pLightRr);
 	pLightRr = pack_float(p2.position.y, pLightRr);
 	pLightRr = pack_float(p2.position.z, pLightRr);
-	pLightRr = pack_float(p2.r, pLightRr);
+	pLightRr = pack_float(p2.r, pLightRr);*/
 
 	h3dUnmapResStream(lightRrTex);
 
@@ -173,6 +160,14 @@ Scene::Scene() {
 			H3DResFlags::NoTexMipmaps);
 	uint8_t* pTileTex = static_cast<uint8_t*>(h3dMapResStream(tileTex,
 			H3DTexRes::ImageElem, 0, H3DTexRes::ImgPixelStream, false, true));
+
+	for (int Z = 0; Z < 16; Z++){
+		for (int Y = 0; Y < 16; Y++){
+			for (int X = 0; X < 16;X++){
+				pTileTex[(256 * Z + 16 * Y + X) * 64] = 0;
+			}
+		}
+	}
 
 	h3dUnmapResStream(tileTex);
 
@@ -401,25 +396,29 @@ void Scene::keyStateHandler() {
 
 		if (_keys[Key::W]) {
 			// Move forward
-			_x -= sinf(degToRad(_ry)) * cosf(-degToRad(_rx)) * curVel;
+			/*_x -= sinf(degToRad(_ry)) * cosf(-degToRad(_rx)) * curVel;
 			_y -= sinf(-degToRad(_rx)) * curVel;
-			_z -= cosf(degToRad(_ry)) * cosf(-degToRad(_rx)) * curVel;
+			_z -= cosf(degToRad(_ry)) * cosf(-degToRad(_rx)) * curVel;*/
+			m_vPointLights[0].position.z += 0.5;
 		}
 		if (_keys[Key::S]) {
 			// Move backward
-			_x += sinf(degToRad(_ry)) * cosf(-degToRad(_rx)) * curVel;
+			/*_x += sinf(degToRad(_ry)) * cosf(-degToRad(_rx)) * curVel;
 			_y += sinf(-degToRad(_rx)) * curVel;
-			_z += cosf(degToRad(_ry)) * cosf(-degToRad(_rx)) * curVel;
+			_z += cosf(degToRad(_ry)) * cosf(-degToRad(_rx)) * curVel;*/
+			m_vPointLights[0].position.z -= 0.5;
 		}
 		if (_keys[Key::A]) {
 			// Strafe left
-			_x += sinf(degToRad(_ry - 90)) * curVel;
-			_z += cosf(degToRad(_ry - 90)) * curVel;
+			/*_x += sinf(degToRad(_ry - 90)) * curVel;
+			_z += cosf(degToRad(_ry - 90)) * curVel;*/
+			m_vPointLights[0].position.x -= 0.5;
 		}
 		if (_keys[Key::D]) {
 			// Strafe right
-			_x += sinf(degToRad(_ry + 90)) * curVel;
-			_z += cosf(degToRad(_ry + 90)) * curVel;
+			/*_x += sinf(degToRad(_ry + 90)) * curVel;
+			_z += cosf(degToRad(_ry + 90)) * curVel;*/
+			m_vPointLights[0].position.x += 0.5;
 		}
 	}
 }
@@ -444,8 +443,8 @@ void Scene::updateLightTexture() {
 			H3DTexRes::ImageElem, 0, H3DTexRes::ImgPixelStream, false, true));
 
 	//drop all counts to 0
-	for (int i = 0; i < (16 * 16 * 16); i++)
-		pTileTex[i * 64] = 0;
+	for (int i = 0; i < (16 * 16 * 16 * 16 * 4); i++)
+		pTileTex[i] = 0;
 
 	//get camera view matrix
 	const float *camTrans;
@@ -455,12 +454,19 @@ void Scene::updateLightTexture() {
 	//for each light
 	for (int i = 0; i < m_vPointLights.size(); i++) {
 		//transform position to view space
-		LOGI("Point Light %d position: %f, %f, %f\n", i,
+		
+
+		printf("Point Light %d position: %f, %f, %f\n", i,
 				m_vPointLights[i].position.x, m_vPointLights[i].position.y,
 				m_vPointLights[i].position.z);
 		Vec3f R = viewMat * m_vPointLights[i].position;
+
+		printf("Transformed Light %d position: %f, %f, %f\n", i,
+			R.x, R.y,
+			R.z);
+
 		//write to tile texture
-		tileIt(R, m_vPointLights[i].r, m_vPointLights[i].lightIndex, pTileTex);
+		tileIt2(m_vPointLights[i].position, m_vPointLights[i].r, m_vPointLights[i].lightIndex, pTileTex);
 	}
 
 	h3dUnmapResStream(tileTex);
@@ -490,7 +496,7 @@ void Scene::tileIt(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer) {
 
 	//get Quantized Z range
 	int qZMax, qZMin;
-	getQZRange(minZ, maxZ, &qZMin, &qZMax);
+	getQZRange(minZ, maxZ, qZMin,qZMax);
 
 	//TODO: This could cause problems
 	int centerZ;
@@ -498,7 +504,7 @@ void Scene::tileIt(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer) {
 		if (R.z < quantizedZ[centerZ])
 			break;
 	}
-	LOGI("centerZ = %d\n", centerZ);
+	printf("centerZ = %d\n", centerZ);
 
 	//check if whole thing is in one z subdivision
 	if (qZMax < qZMin) {
@@ -520,7 +526,7 @@ void Scene::tileIt(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer) {
 	project2Near(Rcenter);
 	project2Near(rcenter, R.z);
 
-	LOGI("To near projected %f, %f, %f center: %f, %f, %f \t %f", R.x, R.y, R.z,
+	printf("To near projected %f, %f, %f center: %f, %f, %f \t %f", R.x, R.y, R.z,
 			Rcenter.x, Rcenter.y, Rcenter.z, r);
 
 	if (qZMax == qZMin) {
@@ -551,13 +557,13 @@ void Scene::tileIt(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer) {
 	float rtop, rbottom;
 	Vec3f Rtop, Rbottom;
 	for (int z = qZMin; z <= qZMax; z++) {
-		LOGI("Cutting sphere: z = %f\n", quantizedZ[z]);
+		printf("Cutting sphere: z = %f\n", quantizedZ[z]);
 		cutSphere(quantizedZ[z], R, r, Rtop, rtop);
-		LOGI("cutSphere: %f, %f, %f \t %f", Rtop.x, Rtop.y, Rtop.z, rtop);
+		printf("cutSphere: %f, %f, %f \t %f", Rtop.x, Rtop.y, Rtop.z, rtop);
 		rtop = rtop * m_fZNear / Rtop.z;
 		project2Near(Rtop);
-		LOGI("project2Near: %f, %f, %f \t %f", Rtop.x, Rtop.y, Rtop.z, rtop);
-		if (z > 0 ||) {
+		printf("project2Near: %f, %f, %f \t %f", Rtop.x, Rtop.y, Rtop.z, rtop);
+		if (z > 0) {
 			if (z == qZMin) {
 				//there's no bottom
 				markZRowTilesSphere(&Rtop, rtop, qZMin - 1, lightIndex,
@@ -578,16 +584,16 @@ void Scene::tileIt(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer) {
 
 }
 
-void Scene::getQZRange(float ZMin, float ZMax, int* lower, int* upper) {
+void Scene::getQZRange(float ZMin, float ZMax, int& lower, int& upper) {
 	int i = 0;
 	for (; i < numZDivisions; i++)
 		if (ZMin <= quantizedZ[i])
 			break;
-	(*lower) = i; // - 1;
+	lower = i; // - 1;
 	for (; i < numZDivisions; i++)
 		if (ZMax <= quantizedZ[i])
 			break;
-	(*upper) = i - 1;
+	upper = i - 1;
 }
 
 void Scene::getQYRange(float YMin, float YMax, int* lower, int* upper) {
@@ -643,18 +649,19 @@ void Scene::cutSphere(float Z, Vec3f R, float r, Vec3f& RCut, float& rc) {
 
 void Scene::markYRowTilesSphere(float from, float to, int count, uint8_t Z,
 		uint8_t Y, uint8_t lightIndex, uint8_t* texPointer) {
-	uint8_t ixStart = (int) ((from + fRightEdge) / xStep);
-	uint8_t ixStop = (int) ((to + fRightEdge) / xStep);
+	int ixStart = (int) ((from + fRightEdge) / xStep);
+	int ixStop = (int) ((to + fRightEdge) / xStep);
 
 	ixStart = ixStart > 0 ? ixStart < 15 ? ixStart : 15 : 0;
 	ixStop = ixStop > 0 ? ixStop < 15 ? ixStop : 15 : 0;
-	LOGI("Marking tiles from %d to %d for Z=%d and Y=%d\n", ixStart, ixStop, Z,
-			Y);
+	/*printf("Marking tiles from %d to %d for Z=%d and Y=%d\n", ixStart, ixStop, Z,
+			Y);*/
 	int ZYindex = 256 * Z + 16 * Y;
 	for (int j = ixStart; j <= ixStop; j++) {
 		int index = ZYindex + j;
+		index *= 64;
 		uint8_t count = texPointer[index];
-		LOGI("Calculated index = 256 * Z + 16 * Y + j = %d\n", index);
+		//printf("Calculated index = 256 * Z + 16 * Y + j = %d\n", index);
 		if (texPointer[index + count + 4] != lightIndex) {
 			texPointer[index + count + 4] = lightIndex; //TODO : check if this works
 			texPointer[index]++; //increment count
@@ -680,55 +687,52 @@ void Scene::markZRowTilesSphere(Vec3f* R, float r, uint8_t Z,
 	else
 		iyMax = 0;
 
-	LOGI("calculating iYmin: ((ry - r + fTopEdge) / yStep : %f / %f = %d",
+	/*printf("calculating iYmin: ((ry - r + fTopEdge) / yStep : %f / %f = %d",
 			ry - r + fTopEdge, yStep, iyMin);
-
+*/
 	iyMin = iyMin > 0 ? iyMin < 15 ? iyMin : 15 : 0;
 	iyMax = iyMax > 0 ? iyMax < 15 ? iyMax : 15 : 0;
 
-	LOGI("iyMin, iyMax, fTopEdge,  yStep, ry: %d, %d, %f, %f, %f\n", iyMin,
+	/*printf("iyMin, iyMax, fTopEdge,  yStep, ry: %d, %d, %f, %f, %f\n", iyMin,
 			iyMax, fTopEdge, yStep, ry);
-
+*/
 	int center = 0;
 	if (iyMin > iyMax) {
 		markYRowTilesSphere(rx - r, rx + r, 0, Z, iyMax, lightIndex,
 				texPointer);
-	} else if (iyMax == iyMin) {
-		float y = -fTopEdge + iyMin * yStep;
-		float dy = ry - y;
-		float rc;
-		rc = sqrt(r * r - dy * dy);
-		if (y > ry) {
-			markYRowTilesSphere(rx - r, rx + r, 0, Z, iyMax - 1, lightIndex,
-					texPointer);
-			markYRowTilesSphere(rx - rc, rx + rc, 0, Z, iyMax, lightIndex,
-					texPointer);
-		} else {
-			markYRowTilesSphere(rx - r, rx + r, 0, Z, iyMax, lightIndex,
-					texPointer);
-			markYRowTilesSphere(rx - rc, rx + rc, 0, Z, iyMax - 1, lightIndex,
-					texPointer);
-		}
-	} else {
-		for (int i = iyMin; i <= iyMax; i++) {
-			float y = -fTopEdge + i * yStep;
+		return;
+	} 
+	
+	
+	int Y = iyMin;
+	float y = -fTopEdge + Y * yStep;
+	while (y < ry) {
+		if (Y>0){
 			float dy = ry - y;
 			float rc;
-			if (y > ry && y < ry + yStep) {
-				//center between ys
-				//mark twice
-				center = 1;
-				rc = r;
-				markYRowTilesSphere(rx - rc, rx + rc, 0, Z, i - 1, lightIndex,
-						texPointer);
-
-			}
 			rc = sqrt(r * r - dy * dy);
-
-			LOGI("markZRowTilesSphere: %f %f %f\n", rx, rc, Z);
-			markYRowTilesSphere(rx - rc, rx + rc, 0, Z, i + center - 1,
-					lightIndex, texPointer);
+			markYRowTilesSphere(rx - rc, rx + rc, 0, Z, Y - 1, lightIndex,
+				texPointer);
 		}
+		Y++;
+		if (Y > 16) return;
+		y = -fTopEdge + Y * yStep;
+	} 
+	if (Y>0)
+		markYRowTilesSphere(rx - r, rx + r, 0, Z, Y - 1, lightIndex,
+		texPointer);
+
+	while (Y < iyMax){
+		if (Y>=0){
+			float y = -fTopEdge + Y * yStep;
+			float dy = ry - y;
+			float rc;
+			rc = sqrt(r * r - dy * dy);
+			markYRowTilesSphere(rx - rc, rx + rc, 0, Z, Y, lightIndex,
+				texPointer);
+		}
+		Y++;
+		if (Y > 15) return;
 	}
 }
 
@@ -756,15 +760,44 @@ void Scene::tileIt2(Vec3f R, float r, uint8_t lightIndex, uint8_t* texPointer) {
 
 	//get Quantized Z range
 	int qZMax, qZMin;
-	getQZRange(minZ, maxZ, &qZMin, &qZMax);
+	getQZRange(minZ, maxZ, qZMin, qZMax);
 
-	//TODO: This could cause problems
-	int centerZ;
-	for (centerZ = qZMin; centerZ < qZMax; centerZ++) {
-		if (R.z < quantizedZ[centerZ])
-			break;
+	if (qZMax < qZMin){
+		project2Near(r, R.z);
+		project2Near(R);
+		markZRowTilesSphere(&R, r, qZMax, lightIndex, texPointer);
+		return;
 	}
 
-	centerZ = centerZ == 0 ? 0 : centerZ-1;
-	LOGI("centerZ = %d\n", centerZ);
+	Vec3f Rcut = Vec3f(R);
+	float rcut = r;
+
+	int z = qZMin;
+	while (float cutZ = quantizedZ[z] < R.z){
+		if (z>0){
+			float cutZ = quantizedZ[z];
+			cutSphere(cutZ, R, r, Rcut, rcut);
+			project2Near(rcut, Rcut.z);
+			project2Near(Rcut);
+			markZRowTilesSphere(&Rcut, rcut, z - 1, lightIndex, texPointer);
+		}
+		z++;
+		if (z > 16) return;
+	}
+	if (z > 0){
+		project2Near(rcut, Rcut.z);
+		project2Near(Rcut);
+		markZRowTilesSphere(&Rcut, rcut, z - 1, lightIndex, texPointer);
+	}
+	while (z <= qZMax){
+		/*if (z>0){*/
+			float cutZ = quantizedZ[z];
+			cutSphere(cutZ, R, r, Rcut, rcut);
+			project2Near(rcut, Rcut.z);
+			project2Near(Rcut);
+			markZRowTilesSphere(&Rcut, rcut, z, lightIndex, texPointer);
+		//}
+		z++;
+		if (z > 15) return;
+	}
 }
